@@ -1,5 +1,5 @@
 {
-  "name": "sample",
+  "name": "redis-remote",
   "version": "0.0.0",
   "private": true,
   "scripts": {

@@ -5,7 +5,7 @@ var faker = require("faker");
 var redis = require("redis");
 
 var options = {
-    host: '67.205.152.156'
+    host: process.env.REDIS_HOST
 }
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -21,12 +21,16 @@ router.post('/', function(req, res, next) {
 
     locals = {};
     locals.people = [];
+    var multi = client.multi();
     for (var i = 0; i < 10; i++) {
        var person = {username: faker.internet.userName(), name: faker.name.findName()};
        locals.people.push(person);
-       client.set(person.username, person.name);
+       multi.set(person.username, person.name);
     }
-    client.info('keyspace', redis.print);
+    multi.exec(function (err, replies) {
+	        console.log(replies); 
+    });
+//  client.info('keyspace', redis.print);
     client.quit();
 
     res.json(locals);
